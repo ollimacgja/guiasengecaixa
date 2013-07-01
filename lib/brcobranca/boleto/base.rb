@@ -152,7 +152,24 @@ module Brcobranca
       def data_vencimento
         raise ArgumentError, "data_documento não pode estar em branco." unless self.data_documento
         return self.data_documento unless self.dias_vencimento
-        (self.data_documento + self.dias_vencimento.to_i)
+        if Date.current.month == 2
+          if Date.current.day == 29
+            Date.new(Date.current.year, 3, 30)
+          else
+            Date.new(Date.current.year, 2, 28)
+          end
+        elsif Date.current.day > 30
+          if Date.current.month == 1
+            Date.new(Date.current.year, 2, 28)
+          elsif Date.current.month == 12
+            Date.new(Date.current.year + 1, 1, 30)
+          else
+            Date.new(Date.current.year, Date.current.month + 1, 30)
+          end
+        else
+          Date.new(Date.current.year, Date.current.month, 30)
+        end
+        # (self.data_documento + self.dias_vencimento.to_i)
       end
 
       # Fator de vencimento calculado com base na data de vencimento do boleto.
