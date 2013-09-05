@@ -84,15 +84,23 @@ module Brcobranca
       #  25: dígito verificador do campo livre
       # @return [String]
       def codigo_barras_segunda_parte
-        campo_livre = "#{convenio}" << 
-        "#{convenio_dv}" <<
-        "#{nosso_numero_boleto[2..4]}" <<
-        "#{nosso_numero_boleto[0..0]}" <<
-        "#{nosso_numero_boleto[5..7]}" <<
-        "#{nosso_numero_boleto[1..1]}" <<
-        "#{nosso_numero_boleto[8..16]}"
+        # campo_livre = "#{convenio}" << 
+        # "#{convenio_dv}" <<
+        # "#{nosso_numero_boleto[2..4]}" <<
+        # "#{nosso_numero_boleto[0..0]}" <<
+        # "#{nosso_numero_boleto[5..7]}" <<
+        # "#{nosso_numero_boleto[1..1]}" <<
+        # "#{nosso_numero_boleto[8..16]}"
         
-        "#{campo_livre}#{campo_livre.modulo11_2to9_caixa}"
+        # "#{campo_livre}#{campo_livre.modulo11_2to9_caixa}"
+        campo_livre = "97" <<
+        "#{documento_cedente_sicas[8,5]}" <<
+        "7" << 
+        "1" <<
+        "77" <<
+        "#{numero_documento[3,12]}" <<
+        "42"
+        "#{campo_livre}"
       end
 
     end

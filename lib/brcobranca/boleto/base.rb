@@ -70,7 +70,28 @@ module Brcobranca
       # <b>OPCIONAL</b>: Endereco da pessoa que receberá o boleto
       attr_accessor :sacado_endereco
       # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
-      attr_accessor :sacado_documento
+      attr_accessor  :sacado_documento
+      # para novo boleto caixa sindical...
+      attr_accessor  :documento_cedente_cnpj 
+      attr_accessor  :documento_cedente_sicas
+      attr_accessor  :cedente_endereco_log 
+      attr_accessor  :cedente_endereco_num 
+      attr_accessor  :cedente_endereco_compl 
+      attr_accessor  :cedente_endereco_bairro
+      attr_accessor  :cedente_endereco_cep 
+      attr_accessor  :cedente_endereco_cidade
+      attr_accessor  :cedente_endereco_uf
+      attr_accessor  :sacado_endereco_log
+      attr_accessor  :sacado_endereco_num
+      attr_accessor  :sacado_endereco_compl 
+      attr_accessor  :sacado_endereco_bairro
+      attr_accessor  :sacado_endereco_cep
+      attr_accessor  :sacado_endereco_cidade
+      attr_accessor  :sacado_endereco_uf
+      attr_accessor  :mora_multa
+      attr_accessor  :total_valor
+      attr_accessor  :vencimento_fixo
+      attr_accessor  :exercicio
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => "não pode estar em branco."
@@ -152,24 +173,28 @@ module Brcobranca
       def data_vencimento
         raise ArgumentError, "data_documento não pode estar em branco." unless self.data_documento
         return self.data_documento unless self.dias_vencimento
-        if Date.current.month == 2
-          if Date.current.day == 29
-            Date.new(Date.current.year, 3, 30)
-          else
-            Date.new(Date.current.year, 2, 28)
-          end
-        elsif Date.current.day > 30
-          if Date.current.month == 1
-            Date.new(Date.current.year, 2, 28)
-          elsif Date.current.month == 12
-            Date.new(Date.current.year + 1, 1, 30)
-          else
-            Date.new(Date.current.year, Date.current.month + 1, 30)
-          end
+        if vencimento_fixo.present?
+          vencimento_fixo
         else
-          Date.new(Date.current.year, Date.current.month, 30)
+          if Date.current.month == 2
+            if Date.current.day == 29
+              Date.new(Date.current.year, 3, 30)
+            else
+              Date.new(Date.current.year, 2, 28)
+            end
+          elsif Date.current.day > 30
+            if Date.current.month == 1
+              Date.new(Date.current.year, 2, 28)
+            elsif Date.current.month == 12
+              Date.new(Date.current.year + 1, 1, 30)
+            else
+              Date.new(Date.current.year, Date.current.month + 1, 30)
+            end
+          else
+            Date.new(Date.current.year, Date.current.month, 30)
+          end
+          # (self.data_documento + self.dias_vencimento.to_i)
         end
-        # (self.data_documento + self.dias_vencimento.to_i)
       end
 
       # Fator de vencimento calculado com base na data de vencimento do boleto.
